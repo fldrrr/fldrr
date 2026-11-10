@@ -5,7 +5,7 @@
      Settings you may want to change
      --------------------------------------------------------- */
   const CONFIG = {
-    email: 'adres@do-uzupelnienia.pl',   // where the brief goes
+    email: 'filip.dyduch@gmail.com',   // where the brief goes
     // Optional. URL of your own server function that talks to a language model.
     // It receives {lang, answers} as JSON and returns {summary, followup}.
     // Left empty, the bot runs on its built-in script and nothing leaves the browser.
