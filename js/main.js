@@ -458,6 +458,39 @@
   })();
 
   /* =========================================================
+     Sign-in gate. A mock: the check runs in the browser and only
+     hides the page, it does not protect anything.
+     ========================================================= */
+  const gate = document.getElementById('gate'), gateForm = document.getElementById('gate-form');
+  const GATE_HASH = '14301d897aa65d9b2e71b8ab6e85cd9cf7eec34d39638b8a02a38c69b930cc35';
+  const GATE_T = { pl: { empty: 'Wpisz login i hasło.', wrong: 'Nieprawidłowy login lub hasło.' }, en: { empty: 'Enter your login and password.', wrong: 'Wrong login or password.' } };
+  const mainEl = document.getElementById('main'), topEl = document.querySelector('.top');
+  const locked = () => document.documentElement.classList.contains('locked');
+  const setInert = v => { [mainEl, topEl, document.querySelector('.skip')].forEach(el => { if (el) el.inert = v; }); };
+  setInert(locked());
+  if (locked()) requestAnimationFrame(() => document.getElementById('gate-u').focus());
+  const sha = async text => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)))].map(b => b.toString(16).padStart(2, '0')).join('');
+  gateForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const u = document.getElementById('gate-u'), p = document.getElementById('gate-p'), err = document.getElementById('gate-err');
+    const fail = msg => {
+      err.textContent = msg;
+      gate.classList.remove('is-wrong'); void gate.offsetWidth; gate.classList.add('is-wrong');
+      (u.value.trim() ? p : u).focus();
+    };
+    if (!u.value.trim() || !p.value) return fail(GATE_T[lang].empty);
+    let ok = false;
+    try { ok = (await sha(u.value.trim() + ':' + p.value)) === GATE_HASH; } catch (e2) { ok = false; }
+    if (!ok) { p.value = ''; return fail(GATE_T[lang].wrong); }
+    try { sessionStorage.setItem('gate', 'open'); } catch (e3) {}
+    gate.classList.add('is-leaving');
+    document.documentElement.classList.remove('locked');
+    setInert(false);
+    scrollTo(0, 0);
+    setTimeout(() => { gate.classList.remove('is-leaving'); }, reduce ? 0 : 950);
+  });
+
+  /* =========================================================
      Boot, accent, scroll-driven motion
      ========================================================= */
   let saved = null;

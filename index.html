@@ -7,11 +7,22 @@
 <meta name="description" content="Zewnętrzny partner projektowy: UX, UI, interaktywny prototyp i visual MVP gotowe do pokazania klientowi.">
 <meta name="theme-color" content="#ffffff">
 <link rel="preload" href="assets/fonts/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=4">
 <script src="https://kit.fontawesome.com/a21ad226a3.js" crossorigin="anonymous" defer></script>
-<script>document.documentElement.classList.add('js');try{var a=localStorage.getItem('accent2');if(a)document.documentElement.dataset.accent=a}catch(e){}</script>
+<script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('gate')!=='open')document.documentElement.classList.add('locked')}catch(e){document.documentElement.classList.add('locked')}try{var a=localStorage.getItem('accent2');if(a)document.documentElement.dataset.accent=a}catch(e){}</script>
 </head>
 <body>
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
+  <form class="gate__form" id="gate-form" novalidate>
+    <h1 class="gate__h" id="gate-h">filip dyduch</h1>
+    <p class="gate__p" data-en="This page is for invited guests. Sign in to see it.">Strona dla zaproszonych. Zaloguj się, żeby ją zobaczyć.</p>
+    <div class="field"><label for="gate-u" data-en="Login">Login</label><input id="gate-u" name="username" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
+    <div class="field"><label for="gate-p" data-en="Password">Hasło</label><input id="gate-p" name="password" type="password" autocomplete="current-password"></div>
+    <p class="field__err" id="gate-err" role="alert"></p>
+    <button class="bot__go on" type="submit"><span data-en="Enter">Wejdź</span><i class="fa-light fa-arrow-right" aria-hidden="true"></i></button>
+  </form>
+</div>
 
 <a class="skip" href="#main" data-en="Skip to content">Przejdź do treści</a>
 
@@ -187,6 +198,6 @@
 
 </main>
 <div class="cursor" aria-hidden="true"></div>
-<script src="js/main.js" defer></script>
+<script src="js/main.js?v=4" defer></script>
 </body>
 </html>

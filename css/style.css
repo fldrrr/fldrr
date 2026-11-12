@@ -36,6 +36,18 @@ canvas,svg,iframe{display:block}
 .skip{position:fixed;left:var(--g);top:-100px;z-index:30;background:var(--ink);color:var(--paper);padding:.7em 1em;text-decoration:none}
 .skip:focus{top:12px}
 
+/* ---------- sign-in gate (a mock: it only hides the page) ---------- */
+.gate{display:none}
+.locked,.locked body{overflow:hidden}
+.locked .gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:var(--g);background:var(--ink);color:var(--paper);overflow:auto;clip-path:inset(0)}
+.gate.is-leaving{display:grid;position:fixed;inset:0;z-index:100;place-items:center;padding:var(--g);background:var(--ink);color:var(--paper);transition:clip-path .9s var(--ease);clip-path:inset(0 0 100% 0)}
+.gate__form{width:min(100%,460px);display:flex;flex-direction:column;gap:1.3em}
+.gate__h{font-size:clamp(48px,9vw,112px);line-height:.86;letter-spacing:-.04em;font-weight:560;margin-left:-.04em}
+.gate__p{font-size:var(--t-lede);line-height:1.3;max-width:24ch;margin-bottom:.4em}
+.gate .bot__go{align-self:flex-start}
+.gate.is-wrong .gate__form{animation:nope .45s var(--ease)}
+@keyframes nope{20%{transform:translateX(-10px)}45%{transform:translateX(8px)}70%{transform:translateX(-4px)}}
+
 /* ---------- top bar: one layer that inverts over whatever is under it ---------- */
 .top{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;gap:clamp(16px,2.4vw,36px);padding:clamp(16px,1.9vw,26px) var(--g);color:var(--ink);font-size:clamp(15px,1.1vw,18px);font-weight:500;border-bottom:1px solid transparent;transition:transform .6s var(--ease),background-color .3s,border-color .3s}
 .top.is-bar{background:var(--paper);border-bottom-color:var(--ink);padding-block:clamp(12px,1.2vw,16px)}
@@ -283,6 +295,8 @@ canvas,svg,iframe{display:block}
   .js .feature[data-wipe]::before{transform:none;transition:none}
   .js [data-scrub] .w{opacity:1}
   .in .rc{animation:none}
+  .gate.is-wrong .gate__form{animation:none}
+  .gate.is-leaving{transition:none}
   .cursor{display:none}
   .bot__a>*,.js .mvp s{transition:none;opacity:1;transform:none}
   .js .mvp li::before,.js .uses li::before{transform:none;transition:none}
