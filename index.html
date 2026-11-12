@@ -7,7 +7,7 @@
 <meta name="description" content="Zewnętrzny partner projektowy: UX, UI, interaktywny prototyp i visual MVP gotowe do pokazania klientowi.">
 <meta name="theme-color" content="#ffffff">
 <link rel="preload" href="assets/fonts/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/style.css?v=9">
 <script src="https://kit.fontawesome.com/a21ad226a3.js" crossorigin="anonymous" defer></script>
 <script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('gate')!=='open')document.documentElement.classList.add('locked')}catch(e){document.documentElement.classList.add('locked')}try{var a=localStorage.getItem('accent2');if(a)document.documentElement.dataset.accent=a}catch(e){}</script>
 </head>
@@ -32,7 +32,7 @@
     <a href="#uslugi" data-en="Services">Usługi</a>
     <a href="#mvp">Visual MVP</a>
     <a href="#realizacja" data-en="Work">Realizacja</a>
-    <a href="#wspolpraca" data-en="Process">Współpraca</a>
+    <a href="#dla-kogo" data-en="Who it’s for">Dla kogo</a>
     <a href="#kontakt" data-en="Contact">Kontakt</a>
   </nav>
   <button class="top__lang" type="button" id="lang" aria-label="Switch to English">EN</button>
@@ -122,20 +122,58 @@
 
 <section class="block" id="realizacja">
   <div class="split">
-    <h2 class="h" data-split data-en="This is not a screenshot.">To nie jest zrzut ekranu.</h2>
-    <p class="lede" data-reveal data-en="i‑3 Plus OT, a controller by Tech Sterowniki. I designed the interface and built a prototype that behaves like the device. Go ahead, click it.">i‑3 Plus OT, sterownik Tech Sterowniki. Zaprojektowałem interfejs i zbudowałem prototyp, który zachowuje się jak urządzenie. Śmiało, kliknij.</p>
+    <h2 class="h h--mark" data-split data-en="This is [[not a screenshot.]]">To [[nie jest zrzut ekranu.]]</h2>
+    <p class="lede only-wide" data-reveal data-en="i‑3 Plus OT, a controller by Tech Sterowniki. I designed the interface and built a prototype that behaves like the device. Go ahead, click it.">i‑3 Plus OT, sterownik Tech Sterowniki. Zaprojektowałem interfejs i zbudowałem prototyp, który zachowuje się jak urządzenie. Śmiało, kliknij.</p>
+    <p class="lede only-phone" data-reveal data-en="Q‑Link: one app screen that controls a smart plug or a circulation pump. I designed it and built a prototype that behaves like the app. Go ahead, tap it.">Q‑Link: jeden ekran aplikacji, który steruje gniazdkiem albo pompą cyrkulacyjną. Zaprojektowałem go i zbudowałem prototyp, który zachowuje się jak aplikacja. Śmiało, dotknij.</p>
   </div>
-  <div class="proto" data-clip>
+  <div class="proto only-wide" data-clip>
+    <div class="tour">
+      <span class="proto__pulse" aria-hidden="true"></span>
+      <p class="tour__text" aria-live="polite"></p>
+      <div class="tour__nav">
+        <button type="button" data-dir="-1"><i class="fa-light fa-arrow-left" aria-hidden="true"></i></button>
+        <span class="tour__count"></span>
+        <button type="button" data-dir="1"><i class="fa-light fa-arrow-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
     <div class="proto__screen" id="proto">
-      <iframe src="work/i3-plus/index.html?ramka=Brak" title="i‑3 Plus OT, interaktywny prototyp interfejsu sterownika" loading="lazy" width="800" height="480"></iframe>
+      <iframe src="work/i3-plus/index.html?ramka=Brak&amp;start=home&amp;motyw=Ciemny&amp;alarm=0" title="i‑3 Plus OT, interaktywny prototyp interfejsu sterownika" loading="lazy" width="800" height="480"></iframe>
     </div>
   </div>
-  <dl class="facts" data-reveal>
+  <dl class="facts only-wide" data-reveal>
     <div><dt data-en="Client">Klient</dt><dd>Tech Sterowniki</dd></div>
     <div><dt data-en="Screen">Ekran</dt><dd data-en="800 × 480 px, touch">800 × 480 px, dotykowy</dd></div>
     <div><dt data-en="Scope">Zakres</dt><dd data-en="UI, interactive prototype">UI, interaktywny prototyp</dd></div>
     <div><dt data-en="Delivered as">Forma</dt><dd data-en="One HTML file">Jeden plik HTML</dd></div>
   </dl>
+
+  <div class="proto proto--phone only-phone" data-clip>
+    <div class="tour">
+      <span class="proto__pulse" aria-hidden="true"></span>
+      <p class="tour__text" aria-live="polite"></p>
+      <div class="tour__nav">
+        <button type="button" data-dir="-1"><i class="fa-light fa-arrow-left" aria-hidden="true"></i></button>
+        <span class="tour__count"></span>
+        <button type="button" data-dir="1"><i class="fa-light fa-arrow-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="proto__screen" id="proto-phone">
+      <iframe src="work/smart-plug/index.html" title="Q‑Link, interaktywny prototyp ekranu gniazdka i pompy" loading="lazy" width="390" height="844"></iframe>
+    </div>
+  </div>
+  <dl class="facts only-phone" data-reveal>
+    <div><dt data-en="Project">Projekt</dt><dd data-en="Q‑Link, plug and pump">Q‑Link, gniazdko i pompa</dd></div>
+    <div><dt data-en="Screen">Ekran</dt><dd data-en="390 × 844 px, mobile">390 × 844 px, mobilny</dd></div>
+    <div><dt data-en="Scope">Zakres</dt><dd data-en="UX, UI, interactive prototype">UX, UI, interaktywny prototyp</dd></div>
+    <div><dt data-en="Delivered as">Forma</dt><dd data-en="One HTML file">Jeden plik HTML</dd></div>
+  </dl>
+
+  <h3 class="gain__h" data-split data-en="What Tech Sterowniki got out of it.">Co zyskało na tym Tech Sterowniki.</h3>
+  <ul class="gain">
+    <li data-reveal><h4 data-en="A shorter rollout">Krótsze wdrożenie</h4><p data-en="Developers got a working reference instead of a description to interpret.">Programiści dostali działający wzorzec zamiast opisu do interpretacji.</p></li>
+    <li data-reveal><h4 data-en="Weak points found early">Słabe punkty wyłapane wcześniej</h4><p data-en="Testers went through the prototype and flagged problems before they reached the code.">Testerzy przeszli po prototypie i wskazali problemy, zanim trafiły do kodu.</p></li>
+    <li data-reveal><h4 data-en="Fewer fixes in code">Mniej poprawek w kodzie</h4><p data-en="Changes were made in the prototype, where they cost minutes, not in finished software.">Zmiany powstawały w prototypie, gdzie kosztują minuty, a nie w gotowym oprogramowaniu.</p></li>
+  </ul>
 </section>
 
 <section class="feature" id="funkcja" data-wipe>
@@ -153,16 +191,7 @@
 
 <div class="marq" aria-hidden="true"><div class="marq__track" id="marq"></div></div>
 
-<section class="block" id="wspolpraca">
-  <h2 class="h" data-split data-en="How I take the work over.">Jak przejmuję pracę.</h2>
-  <ol class="steps">
-    <li data-reveal><span class="steps__n">1</span><h3 data-en="A conversation">Rozmowa</h3><p data-en="We settle what needs to exist and for whom.">Ustalamy, co ma powstać i dla kogo.</p></li>
-    <li data-reveal><span class="steps__n">2</span><h3 data-en="A flow sketch">Szkic przepływu</h3><p data-en="A map of screens and decisions. Changes are cheapest here.">Mapa ekranów i decyzji. Tu poprawki są najtańsze.</p></li>
-    <li data-reveal><span class="steps__n">3</span><h3 data-en="The prototype">Prototyp</h3><p data-en="Built in the browser. You watch it grow.">Powstaje w przeglądarce. Postęp widzicie na bieżąco.</p></li>
-    <li data-reveal><span class="steps__n">4</span><h3 data-en="The handover">Przekazanie</h3><p data-en="The prototype, the sources and notes for developers.">Prototyp, źródła i opis dla developerów.</p></li>
-  </ol>
-  <p class="fine" data-reveal data-en="Why so fast? The tedious part of the work is automated, so the time goes into design decisions.">Skąd tempo? Żmudną część pracy oddaję automatyzacji, a czas zostaje na decyzje projektowe.</p>
-
+<section class="block" id="dla-kogo">
   <div class="pair">
   <h2 class="h" data-split data-en="For teams short on hands, not ideas.">Dla zespołów, którym brakuje rąk, a nie pomysłów.</h2>
   <ul class="who">
@@ -198,6 +227,6 @@
 
 </main>
 <div class="cursor" aria-hidden="true"></div>
-<script src="js/main.js?v=4" defer></script>
+<script src="js/main.js?v=9" defer></script>
 </body>
 </html>

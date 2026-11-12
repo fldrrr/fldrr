@@ -171,14 +171,15 @@
     let i = 0, c = 0, hl = false, html = '';
     const ripple = el.hasAttribute('data-ripple');
     for (let w of text.trim().split(/\s+/)) {
-      if (w.startsWith('[[')) { hl = true; w = w.slice(2); }
+      let start = false;
+      if (w.startsWith('[[')) { hl = true; start = true; w = w.slice(2); }
       const end = w.indexOf(']]');
       const tail = end > -1 ? w.slice(end + 2) : '';
       if (end > -1) w = w.slice(0, end);
       let inner = ripple ? [...w].map(ch => `<span class="rc" style="--c:${c++}">${esc(ch)}</span>`).join('') : esc(w);
       // inside a marked phrase the space belongs to the word before it, so the mark runs unbroken
       const joined = hl && end === -1;
-      if (hl) inner = `<b class="hl">${inner}${joined ? ' ' : ''}</b>${esc(tail)}`;
+      if (hl) inner = `<b class="hl${start ? ' hl--start' : ''}${end > -1 ? ' hl--end' : ''}">${inner}${joined ? ' ' : ''}</b>${esc(tail)}`;
       html += `<span class="w${hl ? ' w--hl' : ''}"><span style="--i:${i++}">${inner}</span></span>` + (joined ? '' : ' ');
       if (end > -1) hl = false;
     }
@@ -234,18 +235,78 @@
     try { localStorage.setItem('lang', l); } catch (e) {}
     buildMarquee();
     scrub();
+    drawTour();
     bot.render(true);
   };
   langBtn.addEventListener('click', () => setLang(lang === 'pl' ? 'en' : 'pl'));
 
-  /* Live prototype: keep the 800x480 screen at native pixels, scaled */
-  const proto = document.getElementById('proto');
-  if (proto) {
-    const fr = proto.querySelector('iframe');
-    const fit = () => { fr.style.transform = `scale(${proto.clientWidth / 800})`; };
-    new ResizeObserver(fit).observe(proto);
-    fit();
+  /* Live prototypes: each screen stays at native pixels and is scaled to fit.
+     The walkthrough switches a prototype between prepared states. */
+  const PROTOS = [
+    {
+      el: document.getElementById('proto'), w: 800,
+      go: (fr, st) => { fr.src = 'work/i3-plus/index.html?ramka=Brak&' + st.q; },
+      steps: [
+        { q: 'start=home&motyw=Ciemny&alarm=0', pl: ['Interaktywne demo', 'Kliknij dowolne urządzenie na ekranie.'], en: ['Interactive demo', 'Click any device on the screen.'] },
+        { q: 'start=menu&motyw=Ciemny&alarm=0', pl: ['Menu', 'Wejdź w dowolną pozycję.'], en: ['Menu', 'Open any item.'] },
+        { q: 'start=tyg&motyw=Ciemny&alarm=0', pl: ['Harmonogram', 'Zmień godziny dotykiem.'], en: ['Schedule', 'Change the hours by touch.'] },
+        { q: 'start=home&motyw=Jasny&alarm=0', pl: ['Motyw jasny', 'Ten sam interfejs, drugi motyw.'], en: ['Light theme', 'Same interface, second theme.'] },
+        { q: 'start=home&motyw=Ciemny&alarm=1', pl: ['Alarm', 'Tak sterownik zgłasza awarię.'], en: ['Alarm', 'How the controller reports a fault.'] }
+      ]
+    },
+    {
+      el: document.getElementById('proto-phone'), w: 390,
+      // the export carries its own settings panel; here the walkthrough drives it instead
+      css: '.tw{display:none!important}html,body{background:#061727!important}body{padding:0!important;min-height:0!important;display:block!important;overflow:hidden!important}#dc-root{margin:0!important;box-shadow:none!important}',
+      go: (fr, st) => {
+        const d = fr.contentDocument, w = fr.contentWindow;
+        if (!d || !w || !w.__dcNavigate) return;
+        const press = sel => { const b = d.querySelector(sel); if (b) b.click(); };
+        press('#tw-reset');
+        (st.tw || []).forEach(([k, v]) => press(`[data-tw="${k}"][data-val="${v}"]`));
+        w.__dcNavigate(st.screen || 'status');
+      },
+      steps: [
+        { pl: ['Interaktywne demo', 'Dotknij gniazdka.'], en: ['Interactive demo', 'Tap the plug.'] },
+        { tw: [['tryb', 'Pompa cyrkulacyjna']], pl: ['Pompa', 'Tryb pompy cyrkulacyjnej.'], en: ['Pump', 'Circulation-pump mode.'] },
+        { screen: 'schedule', pl: ['Harmonogram', 'Rozwiń dzień i edytuj.'], en: ['Schedule', 'Expand a day and edit.'] },
+        { screen: 'usage', pl: ['Zużycie', 'Energia w czasie.'], en: ['Usage', 'Energy over time.'] },
+        { tw: [['kontrast', 'Wysoki']], pl: ['Wysoki kontrast', 'Wersja dostępnościowa.'], en: ['High contrast', 'The accessibility version.'] }
+      ]
+    }
+  ].filter(p => p.el);
+  function drawTour() {
+    PROTOS.forEach(p => {
+      const t = p.steps[p.at][lang];
+      p.textEl.innerHTML = `<b>${esc(t[0])}</b>${esc(t[1])}`;
+      p.countEl.textContent = `${p.at + 1}/${p.steps.length}`;
+      const [prev, next] = p.navEl.querySelectorAll('button');
+      prev.setAttribute('aria-label', lang === 'pl' ? 'Poprzedni ekran prototypu' : 'Previous prototype screen');
+      next.setAttribute('aria-label', lang === 'pl' ? 'Następny ekran prototypu' : 'Next prototype screen');
+    });
   }
+  PROTOS.forEach(p => {
+    const fr = p.el.querySelector('iframe'), box = p.el.closest('.proto');
+    p.at = 0;
+    p.navEl = box.querySelector('.tour__nav');
+    p.countEl = box.querySelector('.tour__count');
+    p.textEl = box.querySelector('.tour__text');
+    const fit = () => { fr.style.transform = `scale(${p.el.clientWidth / p.w})`; };
+    new ResizeObserver(fit).observe(p.el);
+    fit();
+    if (p.css) {
+      const dress = () => { try { const d = fr.contentDocument; if (d && d.head && !d.getElementById('embed-css')) { const st = d.createElement('style'); st.id = 'embed-css'; st.textContent = p.css; d.head.append(st); } } catch (e) {} };
+      fr.addEventListener('load', dress);
+      dress();
+    }
+    p.navEl.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      p.at = (p.at + +b.dataset.dir + p.steps.length) % p.steps.length;
+      p.go(fr, p.steps[p.at]);
+      drawTour();
+    });
+  });
 
   /* =========================================================
      Brief bot: a short conversation that fills in a brief and
